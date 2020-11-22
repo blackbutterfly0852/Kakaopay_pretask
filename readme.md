@@ -278,5 +278,5 @@ create table sharedamount (
     * 뿌린 건에 대한 조회는 7일 동안 할 수 있습니다.
         * test_1 : `test...SharedAmountService#isOverSevenDays`
 ### 4) 전체 TEST 결과
-
+   ![testResult](./docs/resultTest.png)
 
