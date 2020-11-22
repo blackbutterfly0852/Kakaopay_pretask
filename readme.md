@@ -11,9 +11,10 @@
 
 ## 2. Problem Solving    
 ### 1) Development environment
-* Language : Java 11
-* FrameWork : Spring Boot 2.3.6.RELEASE + Spring JPA + Junit 5
-* Database : H2 1.4.199.RELEASE (application.yml 참고) 
+* Language : **Java 11**
+* FrameWork : **Spring Boot 2.3.6.RELEASE + Spring JPA + Junit 5**
+* Database : **H2 1.4.199.RELEASE** (application.yml 참고) 
+
     ``` 
     datasource:
         * url: jdbc:h2:tcp://localhost/~/kakaopay
@@ -24,9 +25,9 @@
 ### 2) Database Modeling
 * 응집도를 높이기 위해 각 도메인 별로 __생성 메소드__ 및 __연관관계 메소드__ 활용.
 * **핵심 TABLE 및 DDL**
-   * **Share : 뿌리기 테이블.**
-        * *고유 토큰은 KEY값이 될 수 있으나 문자열이므로 Unique로 제약하고 별도의 PK을 사용한다.*
-   * **SharedAmount : 받기 테이블.**
+   * **Share : 뿌리기 테이블** ->
+        고유 토큰은 KEY값이 될 수 있으나 문자열이므로 Unique로 제약하고 별도의 PK을 사용한다.
+   * **SharedAmount : 받기 테이블**
 ``` H2 Database
 create table share (
     x_share_id bigint not null, -- 뿌리기 PK 
@@ -52,17 +53,20 @@ create table sharedamount (
     x_rcv_time timestamp, -- 분배 받은 시각
     primary key (x_shared_amt_id))
 ```          
-* (추가적으로) 관리용 TABLE 생성
-    * User : 사용자 관리 테이블.
-    * UserRoom : 대화방에 소속된 사용자 관리 테이블.
-    * Room : 대화방 관리 테이블.
     
 * ERD
 
+    
+
+* (추가적으로) 관리용 TABLE 생성
+    * User : 사용자 관리 테이블
+    * UserRoom : 대화방에 소속된 사용자 관리 테이블
+    * Room : 대화방 관리 테이블
+
 * Dummy Data
-  * User, UserRoom, Room 테이블의 Dummy Data.  
-  * 실행 시 __InitDB.java__의 @PostConstruct로 인해 Dummy Data가 Insert.
-  * Dummy Data의 구조 (UserRoom 테이블 참고)
+  * User, UserRoom, Room 테이블의 Dummy Data
+  * 실행 시 __InitDB.java__의 @PostConstruct로 인해 Dummy Data가 Insert
+  * **Dummy Data의 구조 (UserRoom 테이블 참고)**
   
     |   |roomA  |roomB  |roomC  |roomD  |roomE  |
     |---|:-----:|:-----:|:-----:|:-----:|:-----:|
@@ -72,16 +76,16 @@ create table sharedamount (
     |I  |10     |       |       |13     |       |
     |D  |13     |       |       |       |       |
       
- * ErrorHandling
-  * 다양한 오류 사항을 `kakaopay.moneyDistribute.exception.GlobalExcepionController.java`을 활용하여 일관성 있게 처리.
-  * 예시
+* ErrorHandling
+  * 다양한 오류 사항을 `kakaopay.moneyDistribute.exception.GlobalExceptionController.java`을 활용하여 일관성 있게 처리.
+
   ```json
   {
     "errorStatus": "INTERNAL_SERVER_ERROR",
     "errorCode": 500,
     "errorMessage": "이미 금액을 받았습니다."
   }
- ```
+  ```
 ## 3. API Common Spec
 ### 1) 공통 요청
    | Header    | Description| 
@@ -131,6 +135,26 @@ create table sharedamount (
     "errorMessage": "뿌린 사용자만 조회가 가능합니다."
     }
     ```   
+* 오류시 예외 클래스 종류
+  
+     contents| exception_class | response_code | message |
+    | --- | --- | --- | --- |
+    | 공통 | ConstraintViolationException | 400 | Header를 확인해주세요. |
+    | | MissingServletRequestParameterException | 400 | 파라미터 명을 확인해 주세요. |
+    | | MethodArgumentTypeMismatchException | 400 | 파라미터 값이 유효하지 않습니다. |
+    | 뿌리기 | OverRoomCountException | 500 | 뿌릴 인원은 대화방 인원 보다 작거나 한 명 이상이어야 합니다. |
+    | |NotInTheRoomException | 500 | 해당 대화방에 없는 사용자입니다. |
+    | |NotActivationStatusException | 404 | 해당 사용자는 존재하지 않습니다. |
+    | 금액받기 | isAlreadyReceivedException | 404 | 해당 뿌리기 건에서 이미 금액을 받았습니다. |
+    | | NotExistTokenException | 500 | 해당 토큰이 존재하지 않습니다. |
+    | | NotInTheTokenRoomException | 500 | 다른 대화방의 뿌리기 건을 받을 수 없습니다. |
+    | | DifferentRoomException | 500 | 다른 대화방의 사용자가 받을 수 없습니다. |
+    | | NotTheSameTokenRoomException | 500 | 현재 입력된 대화방과 토큰이 생성된 대화방이 다릅니다. |
+    | | SameTokenCreaterException | 500 | 해당 뿌리기를 만들었기 때문에 받을 수 없습니다.|
+    | | isOverTenMinutesException | 500 | 해당 뿌리기는 시작한지 10분이 지나 금액을 받을 수 없습니다. |
+    | | NotExistSharedAmountException | 404 | 해당 뿌리기건이 종료되어 뿌리기 건이 존재 하지 않습니다. |
+    | 조회시 | NotTokenCreaterException | 500 | 뿌린 사용자만 조회가 가능합니다. |
+    | | isOverSevenDaysException | 500 | 해당 뿌리기는 7일이 지나 조회할 수 없습니다. |  
   
 ## 4. 상세 API 스펙 및 제약사항 처리 
 ### 1) 뿌리기 API → `POST` /api?initAmt=?&initCnt=?
@@ -254,5 +278,5 @@ create table sharedamount (
     * 뿌린 건에 대한 조회는 7일 동안 할 수 있습니다.
         * test_1 : `test...SharedAmountService#isOverSevenDays`
 ### 4) 전체 TEST 결과
-![캡처](C:\201118 KAKAOPAY\moneyDistribute\docs\testResult.png)
+
 
