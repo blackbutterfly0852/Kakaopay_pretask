@@ -66,7 +66,7 @@ create table sharedamount (
 
 * Dummy Data
   * User, UserRoom, Room 테이블의 Dummy Data
-  * 실행 시 __InitDB.java__의 @PostConstruct로 인해 Dummy Data가 Insert
+  * 실행 시 **InitDB.java**의 @PostConstruct로 인해 Dummy Data가 Insert
   * **Dummy Data의 내용 요약 (UserRoom 테이블 참고)** `-> 대화방에 특정 사용자들이 존재함을 표현`
   
      ![testResult](./docs/isInUser.png)
