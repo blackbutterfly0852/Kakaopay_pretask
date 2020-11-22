@@ -39,116 +39,43 @@ public class SharedAmountServiceTest {
     @Autowired
     ShareRepository shareRepository;
 
-
     @Test
-    @DisplayName("토큰 존재 여부 확인")
+    @DisplayName("뿌리기 건이 없으면 오류 발생")
     //@Rollback(false)
-    public void isExistToken() throws Exception {
+    public void test_05() throws Exception {
         // given
         String newToken = createShareMockDate();
-        String findToken = "DBC";
-        // when
-        Share findShare = shareService.findByToken(findToken);
-        if (findShare == null) {
-            // then
-            Assertions.assertThrows(Exception.class, () -> {
-                throw new NotExistTokenException();
-            });
-
-        }
-
-    }
-
-    @Test
-    @DisplayName("다른 대화방의 뿌리기 건을 접근 제한")
-    //@Rollback(false)
-    public void isInTheTokenRoom() throws Exception {
-        // given
-        String newToken = createShareMockDate();
-        Room findRoom = roomService.findByName("roomB");
+        User userB = userService.findByUserName("B");
+        User userC = userService.findByUserName("C");
+        User userD = userService.findByUserName("D");
+        User userE = userService.findByUserName("E");
         Share share = shareService.findByToken(newToken);
+
         // when
-        if (findRoom.getId() != share.getRoom().getId()) {
+        List<SharedAmount> leftSharedAmountB = share.getLeftSharedAmount();
+        leftSharedAmountB.get(0).receiveAmount(userB);
+        List<SharedAmount> leftSharedAmountC = share.getLeftSharedAmount();
+        leftSharedAmountC.get(0).receiveAmount(userC);
+        List<SharedAmount> leftSharedAmountD = share.getLeftSharedAmount();
+        leftSharedAmountD.get(0).receiveAmount(userD);
+
+        // when
+        List<SharedAmount> leftSharedAmountE = share.getLeftSharedAmount();
+
+        if (leftSharedAmountE.size() == 0) {
             // then
             Assertions.assertThrows(Exception.class, () -> {
-                throw new NotInTheTokenRoomException();
+                throw new NotExistSharedAmountException();
             });
 
         }
-
-    }
-
-    @Test
-    @DisplayName("사용자와 토큰 발행자 동일 -> 금액 받기 불가능")
-    //@Rollback(false)
-    public void isSameTheTokenCreater() throws Exception {
-        // given
-        String newToken = createShareMockDate();
-        User findUser = userService.findByUserName("A");
-        Share share = shareService.findByToken(newToken);
-        // when
-        if (findUser.getId() == share.getUser().getId()) {
-            // then
-            Assertions.assertThrows(Exception.class, () -> {
-                throw new SameTokenCreaterException();
-            });
-
-        }
-
-    }
-
-    @Test
-    @DisplayName("토큰 발행 후 10분 경과 금액 받기 불가능")
-    //@Rollback(false)
-    // !!! Test시 createShare()의 setReqCreatedTime 수정 필요
-    public void isOverTenMinutes() throws Exception {
-        // given
-        String newToken = createShareMockDate();
-        Share share = shareService.findByToken(newToken);
-        // when
-        if (share.isOverTenMinutes()) {
-            for (SharedAmount sa : share.getSharedAmountList()) {
-                log.info("sa.getRcvId is expected null : " + sa.getRcvId());
-                assertEquals(null, sa.getRcvId());
-            }
-            // then
-            Assertions.assertThrows(Exception.class, () -> {
-                throw new isOverTenMinutesException();
-            });
-
-        }
-
-        //fail("위에서 오류가 발생해야 합니다.");
-
-    }
-
-    @Test
-    @DisplayName("토큰 발행 후 7일 경과 조회 불가능")
-    // !!! Test시 createShare()의 setReqCreatedTime 수정 필요"
-    public void isOverSevenDays() throws Exception {
-        // given
-        String newToken = createShareMockDate();
-        Share share = shareService.findByToken(newToken);
-        // when
-        if (share.isOverSevenDays()) {
-            for (SharedAmount sa : share.getSharedAmountList()) {
-                log.info("sa.getRcvId is expected null : " + sa.getRcvId());
-                assertEquals(null, sa.getRcvId());
-            }
-            // then
-            Assertions.assertThrows(Exception.class, () -> {
-                throw new isOverSevenDaysException();
-            });
-
-        }
-        //fail("위에서 오류가 발생해야 합니다.");
 
     }
 
     @Test
     @DisplayName("뿌리기 분배 건이 잘 받아지는지 확인")
     //@Rollback(false)
-    public void isGoodSharedAmount() throws Exception {
+    public void test_06() throws Exception {
         // given
         String newToken = createShareMockDate();
         User userB = userService.findByUserName("B");
@@ -188,7 +115,7 @@ public class SharedAmountServiceTest {
     @Test
     @DisplayName("해당 뿌리기건을 이미 받았는지 확인")
     //@Rollback(false)
-    public void isAlreadyReceive() throws Exception {
+    public void test_07() throws Exception {
         // given
         String newToken = createShareMockDate();
         User userB = userService.findByUserName("B");
@@ -208,32 +135,18 @@ public class SharedAmountServiceTest {
     }
 
     @Test
-    @DisplayName("뿌리기 건이 없으면 오류 발생")
+    @DisplayName("사용자와 토큰 발행자 동일 -> 금액 받기 불가능")
     //@Rollback(false)
-    public void findSharedAmountByShare() throws Exception {
+    public void test_08() throws Exception {
         // given
         String newToken = createShareMockDate();
-        User userB = userService.findByUserName("B");
-        User userC = userService.findByUserName("C");
-        User userD = userService.findByUserName("D");
-        User userE = userService.findByUserName("E");
+        User findUser = userService.findByUserName("A");
         Share share = shareService.findByToken(newToken);
-
         // when
-        List<SharedAmount> leftSharedAmountB = share.getLeftSharedAmount();
-        leftSharedAmountB.get(0).receiveAmount(userB);
-        List<SharedAmount> leftSharedAmountC = share.getLeftSharedAmount();
-        leftSharedAmountC.get(0).receiveAmount(userC);
-        List<SharedAmount> leftSharedAmountD = share.getLeftSharedAmount();
-        leftSharedAmountD.get(0).receiveAmount(userD);
-
-        // when
-        List<SharedAmount> leftSharedAmountE = share.getLeftSharedAmount();
-
-        if(leftSharedAmountE.size() == 0){
+        if (findUser.getId() == share.getUser().getId()) {
             // then
             Assertions.assertThrows(Exception.class, () -> {
-                throw new NotExistSharedAmountException();
+                throw new SameTokenCreaterException();
             });
 
         }
@@ -241,9 +154,53 @@ public class SharedAmountServiceTest {
     }
 
     @Test
+    @DisplayName("다른 대화방의 뿌리기 건을 접근 제한")
+    //@Rollback(false)
+    public void test_09() throws Exception {
+        // given
+        String newToken = createShareMockDate();
+        Room findRoom = roomService.findByName("roomB");
+        Share share = shareService.findByToken(newToken);
+        // when
+        if (findRoom.getId() != share.getRoom().getId()) {
+            // then
+            Assertions.assertThrows(Exception.class, () -> {
+                throw new NotInTheTokenRoomException();
+            });
+
+        }
+
+    }
+
+    @Test
+    @DisplayName("토큰 발행 후 10분 경과 금액 받기 불가능")
+    //@Rollback(false)
+    // !!! Test시 createShare()의 setReqCreatedTime 수정 필요
+    public void test_10() throws Exception {
+        // given
+        String newToken = createShareMockDate();
+        Share share = shareService.findByToken(newToken);
+        // when
+        if (share.isOverTenMinutes()) {
+            for (SharedAmount sa : share.getSharedAmountList()) {
+                log.info("sa.getRcvId is expected null : " + sa.getRcvId());
+                assertEquals(null, sa.getRcvId());
+            }
+            // then
+            Assertions.assertThrows(Exception.class, () -> {
+                throw new isOverTenMinutesException();
+            });
+
+        }
+
+        //fail("위에서 오류가 발생해야 합니다.");
+
+    }
+
+    @Test
     @DisplayName("뿌리기건이 잘 조회 되는지 확인")
     //@Rollback(false)
-    public void findSharedAmountByUser() throws Exception {
+    public void test_11() throws Exception {
         // given
         String newToken = createShareMockDate();
         User userB = userService.findByUserName("B");
@@ -282,7 +239,7 @@ public class SharedAmountServiceTest {
     @Test
     @DisplayName("뿌린 사람만 조회가가능한지 확인")
     //@Rollback(false)
-    public void findSharedAmountListBySameUser() throws Exception {
+    public void test_12() throws Exception {
         // given
         String newToken = createShareMockDate();
         User userB = userService.findByUserName("B");
@@ -300,6 +257,51 @@ public class SharedAmountServiceTest {
 
 
     }
+
+
+    @Test
+    @DisplayName("토큰 존재 여부 확인")
+    //@Rollback(false)
+    public void test_13() throws Exception {
+        // given
+        String newToken = createShareMockDate();
+        String findToken = "DBC";
+        // when
+        Share findShare = shareService.findByToken(findToken);
+        if (findShare == null) {
+            // then
+            Assertions.assertThrows(Exception.class, () -> {
+                throw new NotExistTokenException();
+            });
+
+        }
+
+    }
+
+
+    @Test
+    @DisplayName("토큰 발행 후 7일 경과 조회 불가능")
+    // !!! Test시 createShare()의 setReqCreatedTime 수정 필요"
+    public void test_14() throws Exception {
+        // given
+        String newToken = createShareMockDate();
+        Share share = shareService.findByToken(newToken);
+        // when
+        if (share.isOverSevenDays()) {
+            for (SharedAmount sa : share.getSharedAmountList()) {
+                log.info("sa.getRcvId is expected null : " + sa.getRcvId());
+                assertEquals(null, sa.getRcvId());
+            }
+            // then
+            Assertions.assertThrows(Exception.class, () -> {
+                throw new isOverSevenDaysException();
+            });
+
+        }
+        //fail("위에서 오류가 발생해야 합니다.");
+
+    }
+
 
     public String createShareMockDate() {
         User user = userService.findByUserName("A");

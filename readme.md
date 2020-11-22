@@ -154,7 +154,7 @@ create table sharedamount (
     | | `isOverSevenDaysException` | 500 | 해당 뿌리기는 7일이 지나 조회할 수 없습니다. |  
   
 ## 4. 상세 API 스펙 및 제약사항 처리 
-### 1) 뿌리기 API → `POST` /api?initAmt=?&initCnt=?
+### 1) 뿌리기 API → `POST` /api?initAmt={initAmt}&initCnt={initCnt}
 * 요청
 
     | Parameter       |  Type  | Required | Description  |
@@ -180,14 +180,14 @@ create table sharedamount (
 * 제약사항 처리    
     * 뿌릴 금액, 뿌릴 인원을 요청값으로 받습니다.
     * 뿌리기 요청건에 대한 고유 token을 발급하고 응답값으로 내려줍니다.
-        * test_1 : `test...ShareService#isExistToken` 
+        * test_1 : `test...ShareService#test_01` 
     * 뿌릴 금액을 인원수에 맞게 분배하여 저장합니다. (분배 로직은 자유롭게 구현해 주세요.) 
-        * test_1 : `test...ShareService#isGoodDivided`
-        * test_2 : `test...ShareService#isGoodSaveSharedAmount`
+        * test_1 : `test...ShareService#test_02`
+        * test_2 : `test...ShareService#test_03`
     * token은 3자리 문자열로 구성되며 예측이 불가능해야 합니다. 
-        * test_1 : `test...ShareService#isGenerateToken`
+        * test_1 : `test...ShareService#test_04`
 
-### 2) 받기 API → `PUT` /api?token=?
+### 2) 받기 API → `PUT` /api?token={token}
 * 요청
 
     | Parameter       |  Type  | Required | Description  |
@@ -214,18 +214,18 @@ create table sharedamount (
 * 제약사항 처리
     * 뿌리기 시 발급된 token을 요청값으로 받습니다.
     * token에 해당하는 뿌리기 건 중 아직 누구에게도 할당되지 않은 분배건 하나를 API를 호출한 사용자에게 할당하고, 그 금액을 응답값으로 내려줍니다.
-        * test_1 : `test...SharedAmountService#findSharedAmountByShare`
-        * test_2 : `test...SharedAmountService#isGoodSharedAmount`
+        * test_1 : `test/.../SharedAmountService#test_05`
+        * test_2 : `test/.../SharedAmountService#test_06`
     * 뿌리기 당 한 사용자는 한번만 받을 수 있습니다.  
-        * test_1 : `test...SharedAmountService#isAlreadyReceive`
+        * test_1 : `test/.../SharedAmountService#test_07`
     * 자신이 뿌리기한 건은 자신이 받을 수 없습니다. 
-        * test_1 : `test...SharedAmountService#isSameTheTokenCreater`
+        * test_1 : `test/.../SharedAmountService#test_08`
     * 뿌린이가 호출된 대화방과 동일한 대화방에 속한 사용자만이 받을 수 있습니다. 
-        * test_1 : `test...SharedAmountService#NotInTheTokenRoomException`
+        * test_1 : `test/.../SharedAmountService#test_09`
     * 뿌린 건은 10분간만 유효합니다. 뿌린지 10분이 지난 요청에 대해서는 받기 실패 응답이 내려가야 합니다. 
-        * test_1 : `test...SharedAmountService#isOverTenMinutes`
+        * test_1 : `test/.../SharedAmountService#test_10`
 
-### 3) 조회 API → `GET` /api?token=?
+### 3) 조회 API → `GET` /api?token={token}
 * 요청
 
     | Parameter       |  Type  | Required | Description  |
@@ -268,12 +268,12 @@ create table sharedamount (
     * 뿌리기 시 발급된 token을 요청값으로 받습니다.
     * token에 해당하는 뿌리기 건의 현재 상태를 응답값으로 내려줍니다. 현재 상태는 다음의 정보를 포함합니다. 
     * 뿌린 시각, 뿌린 금액, 받기 완료된 금액, 받기 완료된 정보 ([받은 금액, 받은 사용자 아이디] 리스트)
-        * test_1 : `test...SharedAmountService#findSharedAmountByUser`
+        * test_1 : `test/.../SharedAmountService#test_11`
     * 뿌린 사람 자신만 조회를 할 수 있습니다. 다른사람의 뿌리기건이나 유효하지 않은 token에 대해서는 조회 실패 응답이 내려가야 합니다.
-        * test_1 : `test...SharedAmountService#findSharedAmountListBySameUser`
-        * test_2 : `test...ShareService#isExistToken`
+        * test_1 : `test/.../SharedAmountService#test_12`
+        * test_2 : `test/.../ShareService#test_13`
     * 뿌린 건에 대한 조회는 7일 동안 할 수 있습니다.
-        * test_1 : `test...SharedAmountService#isOverSevenDays`
+        * test_1 : `test/.../SharedAmountService#test_14`
 ### 4) 전체 TEST 결과
    ![testResult](./docs/resultTest.png)
 

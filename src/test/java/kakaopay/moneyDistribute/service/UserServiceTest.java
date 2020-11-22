@@ -28,7 +28,7 @@ class UserServiceTest {
     @Test
     @DisplayName("사용자가 대화방에 있는지 확인")
     //@Rollback(false)
-    public void isInTheRoom() throws Exception {
+    public void test_00() throws Exception {
         // given
         User userA = User.createUser("A");
         userService.saveUser(userA);

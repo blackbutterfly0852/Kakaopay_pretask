@@ -26,7 +26,7 @@ class RoomServiceTest {
 
     @Test
     @DisplayName("뿌리기 최초 인원 오류 테스트")
-    public void  initCntException() throws Exception {
+    public void  test_00() throws Exception {
         // given
         int initCnt = 10;
         User userA = User.createUser("A");
