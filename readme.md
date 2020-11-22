@@ -111,14 +111,14 @@ create table sharedamount (
     | `message` | 응답 메세지    |
     | `body` |  API별 응답 내용 |
      ```json
-        // 정상 응답 예시
-        {
-            "code": "200",
-            "message": "정상 처리",
-            "body": {
-                "rcvAmt": 10000
-             }
+     // 정상 응답 예시
+     {
+     "code": "200",
+     "message": "정상 처리",
+     "body": {
+     "rcvAmt": 10000
         }
+     }
      ```
 * 오류 응답 공통
 
@@ -173,11 +173,11 @@ create table sharedamount (
     
      ```json
           {
-              "code": "200",
-              "message": "정상 처리",
-              "body": {
-                  "newToken": "xAS"
-               }
+           "code": "200",
+           "message": "정상 처리",
+           "body": {
+              "newToken": "xAS"
+             }
           }
      ```
 * 제약사항 처리    
@@ -206,11 +206,11 @@ create table sharedamount (
     
      ```json
           {
-              "code": "200",
-              "message": "정상 처리",
-              "body": {
-                  "revAmt": "3500"
-               }
+           "code": "200",
+           "message": "정상 처리",
+           "body": {
+              "revAmt": "3500"
+             }
           }
      ```
 
