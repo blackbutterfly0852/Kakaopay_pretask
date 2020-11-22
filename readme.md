@@ -105,7 +105,7 @@ create table sharedamount (
     
 * 정상 응답 공통
 
-    | contents  | Description          |
+    | Contents  | Description          |
     | ----- | ---------------------|
     | `code` | 응답 코드         |
     | `message` | 응답 메세지    |
@@ -122,7 +122,7 @@ create table sharedamount (
      ```
 * 오류 응답 공통
 
-    | contents  | Description          |
+    | Contents  | Description          |
     | ----- | ---------------------|
     | `errorStatus` | 오류        |  
     | `errorCode` | 오류 코드      |
@@ -137,7 +137,7 @@ create table sharedamount (
     ```   
 * 오류시 예외 클래스 종류
   
-     contents| exception_class | code | message |
+     Contents| ExceptionClass | Code | Message |
     | --- | --- | :---: | --- |
     | 공통 | ConstraintViolationException | 400 | Header를 확인해주세요. |
     | | MissingServletRequestParameterException | 400 | 파라미터 명을 확인해 주세요. |
@@ -160,14 +160,14 @@ create table sharedamount (
 ### 1) 뿌리기 API → `POST` /api?initAmt=?&initCnt=?
 * 요청
 
-    | parameter       |  type  | required | Description  |
+    | Parameter       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
     | initAmt     | long |  ○   | 뿌릴 금액      |
     | initCnt      | int  |  ○   | 뿌릴 인원    |
 
 * 응답
 
-   | variable       |  type  | required | Description  |
+   | Variable       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
     | newToken     | String |  ○   | 고유 토큰      |
     
@@ -193,14 +193,14 @@ create table sharedamount (
 ### 2) 받기 API → `PUT` /api?token=?
 * 요청
 
-    | parameter       |  type  | required | Description  |
+    | Parameter       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
     | token     | String |  ○   | 고유 토큰      |
   
 
 * 응답
 
-    | variable       |  type  | required | Description  |
+    | Variable       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
     | revAmt     | long |  ○   | 받은 금액      |
     
@@ -231,15 +231,15 @@ create table sharedamount (
 ### 3) 조회 API → `GET` /api?token=?
 * 요청
 
-    | parameter       |  type  | required | Description  |
+    | Parameter       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
     | token     | String |  ○   | 고유 토큰      |
     
 * 응답    
 
-    | variable       |  type  | required | Description  |
+    | Variable       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
-    | reqCreatedTime     | localDateTime |  ○   | 뿌린 시각      |
+    | reqCreatedTime     | LocalDateTime |  ○   | 뿌린 시각      |
     | initAmt     | String |  ○   | 뿌린 금액      |
     | totalRcvAMt     | String |  ○   | 받기 완료된 금액      |
     | rcvAmt     | String |  ○   | 받은 금액      |
