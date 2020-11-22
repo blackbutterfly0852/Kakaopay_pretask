@@ -56,10 +56,10 @@ create table sharedamount (
     
 * ERD
 
-![testResult](./docs/ERD.png)
+ ![testResult](./docs/ERD.png)
     
 
-* (추가적으로) 관리용 TABLE 생성
+* (추가적으로) Dummy Data를 위한 TABLE 생성
     * User : 사용자 관리 테이블
     * UserRoom : 대화방에 소속된 사용자 관리 테이블
     * Room : 대화방 관리 테이블
@@ -67,7 +67,7 @@ create table sharedamount (
 * Dummy Data
   * User, UserRoom, Room 테이블의 Dummy Data
   * 실행 시 __InitDB.java__의 @PostConstruct로 인해 Dummy Data가 Insert
-  * **Dummy Data의 구조 (UserRoom 테이블 참고)** `-> 대화방에 특정 사용자들이 존재함을 표현`
+  * **Dummy Data의 내용 요약 (UserRoom 테이블 참고)** `-> 대화방에 특정 사용자들이 존재함을 표현`
   
     |   |roomA  |roomB  |roomC  |roomD  |roomE  |
     |---|:-----:|:-----:|:-----:|:-----:|:-----:|
