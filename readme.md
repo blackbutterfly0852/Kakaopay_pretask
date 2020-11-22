@@ -56,7 +56,7 @@ create table sharedamount (
     
 * ERD
 
- ![testResult](./docs/ERD.png)
+    ![testResult](./docs/ERD.png)
     
 
 * (추가적으로) Dummy Data를 위한 TABLE 생성
@@ -69,13 +69,8 @@ create table sharedamount (
   * 실행 시 __InitDB.java__의 @PostConstruct로 인해 Dummy Data가 Insert
   * **Dummy Data의 내용 요약 (UserRoom 테이블 참고)** `-> 대화방에 특정 사용자들이 존재함을 표현`
   
-    |   |roomA  |roomB  |roomC  |roomD  |roomE  |
-    |---|:-----:|:-----:|:-----:|:-----:|:-----:|
-    |U  |1      |4      |1      |4      |7      |
-    |S  |4      |10     |7      |7      |13     |
-    |R  |7      |       |10     |10     |       |
-    |I  |10     |       |       |13     |       |
-    |D  |13     |       |       |       |       |
+     ![testResult](./docs/isInUser.png)
+
       
 * ErrorHandling
   * 다양한 오류 사항을 `kakaopay.moneyDistribute.exception.GlobalExceptionController.java`을 활용하여 일관성 있게 처리.
@@ -91,8 +86,8 @@ create table sharedamount (
 ### 1) 공통 요청
    | Header    | Description| 
    | --------- | -----------| 
-   | X-USER-ID | 사용자 식별 |      
-   | X-ROOM-ID | 대화방 식별 |      
+   | `X-USER-ID` | 사용자 식별 |      
+   | `X-ROOM-ID` | 대화방 식별 |      
    
 ### 2) 공통 응답
 * 응답코드
@@ -140,22 +135,22 @@ create table sharedamount (
   
      Contents| ExceptionClass | Code | Message |
     | --- | --- | :---: | --- |
-    | 공통 | ConstraintViolationException | 400 | Header를 확인해주세요. |
-    | | MissingServletRequestParameterException | 400 | 파라미터 명을 확인해 주세요. |
-    | | MethodArgumentTypeMismatchException | 400 | 파라미터 값이 유효하지 않습니다. |
-    | 뿌리기 | OverRoomCountException | 500 | 뿌릴 인원은 대화방 인원 보다 작거나 한 명 이상이어야 합니다. |
-    | |NotInTheRoomException | 500 | 해당 대화방에 없는 사용자입니다. |
-    | |NotActivationStatusException | 404 | 해당 사용자는 존재하지 않습니다. |
-    | 금액받기 | isAlreadyReceivedException | 404 | 해당 뿌리기 건에서 이미 금액을 받았습니다. |
-    | | NotExistTokenException | 500 | 해당 토큰이 존재하지 않습니다. |
-    | | NotInTheTokenRoomException | 500 | 다른 대화방의 뿌리기 건을 받을 수 없습니다. |
-    | | DifferentRoomException | 500 | 다른 대화방의 사용자가 받을 수 없습니다. |
-    | | NotTheSameTokenRoomException | 500 | 현재 입력된 대화방과 토큰이 생성된 대화방이 다릅니다. |
-    | | SameTokenCreaterException | 500 | 해당 뿌리기를 만들었기 때문에 받을 수 없습니다.|
-    | | isOverTenMinutesException | 500 | 해당 뿌리기는 시작한지 10분이 지나 금액을 받을 수 없습니다. |
-    | | NotExistSharedAmountException | 404 | 해당 뿌리기건이 종료되어 뿌리기 건이 존재 하지 않습니다. |
-    | 조회시 | NotTokenCreaterException | 500 | 뿌린 사용자만 조회가 가능합니다. |
-    | | isOverSevenDaysException | 500 | 해당 뿌리기는 7일이 지나 조회할 수 없습니다. |  
+    | 공통 | `ConstraintViolationException` | 400 | Header를 확인해주세요. |
+    | | `MissingServletRequestParameterException` | 400 | 파라미터 명을 확인해 주세요. |
+    | | `MethodArgumentTypeMismatchException` | 400 | 파라미터 값이 유효하지 않습니다. |
+    | 뿌리기 | `OverRoomCountException` | 500 | 뿌릴 인원은 대화방 인원 보다 작거나 한 명 이상이어야 합니다. |
+    | |`NotInTheRoomException` | 500 | 해당 대화방에 없는 사용자입니다. |
+    | |`NotActivationStatusException` | 404 | 해당 사용자는 존재하지 않습니다. |
+    | 금액받기 | `isAlreadyReceivedException` | 404 | 해당 뿌리기 건에서 이미 금액을 받았습니다. |
+    | | `NotExistTokenException` | 500 | 해당 토큰이 존재하지 않습니다. |
+    | | `NotInTheTokenRoomException` | 500 | 다른 대화방의 뿌리기 건을 받을 수 없습니다. |
+    | | `DifferentRoomException` | 500 | 다른 대화방의 사용자가 받을 수 없습니다. |
+    | | `NotTheSameTokenRoomException` | 500 | 현재 입력된 대화방과 토큰이 생성된 대화방이 다릅니다. |
+    | | `SameTokenCreaterException` | 500 | 해당 뿌리기를 만들었기 때문에 받을 수 없습니다.|
+    | | `isOverTenMinutesException` | 500 | 해당 뿌리기는 시작한지 10분이 지나 금액을 받을 수 없습니다. |
+    | | `NotExistSharedAmountException` | 404 | 해당 뿌리기건이 종료되어 뿌리기 건이 존재 하지 않습니다. |
+    | 조회시 | `NotTokenCreaterException` | 500 | 뿌린 사용자만 조회가 가능합니다. |
+    | | `isOverSevenDaysException` | 500 | 해당 뿌리기는 7일이 지나 조회할 수 없습니다. |  
   
 ## 4. 상세 API 스펙 및 제약사항 처리 
 ### 1) 뿌리기 API → `POST` /api?initAmt=?&initCnt=?
@@ -163,14 +158,14 @@ create table sharedamount (
 
     | Parameter       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
-    | initAmt     | long |  ○   | 뿌릴 금액      |
-    | initCnt      | int  |  ○   | 뿌릴 인원    |
+    | `initAmt`     | long |  ○   | 뿌릴 금액      |
+    | `initCnt`      | int  |  ○   | 뿌릴 인원    |
 
 * 응답
 
    | Variable       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
-    | newToken     | String |  ○   | 고유 토큰      |
+    | `newToken`     | String |  ○   | 고유 토큰      |
     
      ```json
           {
@@ -196,21 +191,21 @@ create table sharedamount (
 
     | Parameter       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
-    | token     | String |  ○   | 고유 토큰      |
+    | `token`     | String |  ○   | 고유 토큰      |
   
 
 * 응답
 
     | Variable       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
-    | revAmt     | long |  ○   | 받은 금액      |
+    | `rcvAmt`     | long |  ○   | 받은 금액      |
     
      ```json
           {
            "code": "200",
            "message": "정상 처리",
            "body": {
-              "revAmt": "3500"
+              "rcvAmt": "3500"
              }
           }
      ```
@@ -234,17 +229,17 @@ create table sharedamount (
 
     | Parameter       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
-    | token     | String |  ○   | 고유 토큰      |
+    | `token`     | String |  ○   | 고유 토큰      |
     
 * 응답    
 
     | Variable       |  Type  | Required | Description  |
     | :----------: | :----: | :---: | ---------------- |
-    | reqCreatedTime     | LocalDateTime |  ○   | 뿌린 시각      |
-    | initAmt     | String |  ○   | 뿌린 금액      |
-    | totalRcvAMt     | String |  ○   | 받기 완료된 금액      |
-    | rcvAmt     | String |  ○   | 받은 금액      |
-    | rcvId     | String |  ○   | 받은 사용자 ID      |
+    | `reqCreatedTime`     | LocalDateTime |  ○   | 뿌린 시각      |
+    | `initAmt`     | String |  ○   | 뿌린 금액      |
+    | `totalRcvAmt`     | String |  ○   | 받기 완료된 금액      |
+    | `rcvAmt`     | String |  ○   | 받은 금액      |
+    | `rcvId`     | String |  ○   | 받은 사용자 ID      |
     
     ```json
     {
