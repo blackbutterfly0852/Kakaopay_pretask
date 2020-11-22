@@ -22,7 +22,7 @@ public class GlobalExceptionController {
     @ExceptionHandler(MissingRequestHeaderException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(MissingRequestHeaderException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "필수 HEADER 정보가 없습니다.");
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     /**
@@ -32,21 +32,21 @@ public class GlobalExceptionController {
     @ExceptionHandler(OverRoomCountException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(OverRoomCountException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     // 대화방에 존재 하지 않는 사용자__500
     @ExceptionHandler(NotInTheRoomException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(NotInTheRoomException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     // 비활성화 상태__404
     @ExceptionHandler(NotActivationStatusException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(NotActivationStatusException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
 
@@ -58,49 +58,49 @@ public class GlobalExceptionController {
     @ExceptionHandler(isAlreadyReceivedException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(isAlreadyReceivedException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     // 토큰 미존재__404
     @ExceptionHandler(NotExistTokenException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(NotExistTokenException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     // 다른 대화방의 뿌리기 건을 요청한 사용자_500
     @ExceptionHandler(NotInTheTokenRoomException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(NotInTheTokenRoomException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     // 현재 입력된 대화방과 토큰이 생성된 대화방이 다를 경우_500
     @ExceptionHandler(NotTheSameTokenRoomException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(NotTheSameTokenRoomException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     // 자기가 만든 뿌리기 건을 받는 경우_500
     @ExceptionHandler(SameTokenCreaterException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(SameTokenCreaterException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     // 뿌리기 건 10분 경과_500
     @ExceptionHandler(isOverTenMinutesException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(isOverTenMinutesException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     // 뿌리기 건 미존재_500
     @ExceptionHandler(NotExistSharedAmountException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(NotExistSharedAmountException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     /**
@@ -110,14 +110,14 @@ public class GlobalExceptionController {
     @ExceptionHandler(NotTokenCreaterException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(NotTokenCreaterException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
     //  뿌리기 건 7일 경과_500
     @ExceptionHandler(isOverSevenDaysException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(isOverSevenDaysException e) {
         ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
-        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
 }
