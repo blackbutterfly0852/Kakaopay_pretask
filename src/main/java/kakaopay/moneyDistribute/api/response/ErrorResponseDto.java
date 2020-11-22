@@ -1,16 +1,19 @@
 package kakaopay.moneyDistribute.api.response;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponseDto {
-    private final HttpStatus errorStatus;
-    private final int errorCode;
-    private final String errorMessage;
+    private HttpStatus errorStatus;
+    private int errorCode;
+    private String errorMessage;
 
-    public ErrorResponseDto(HttpStatus status, int errCode, String errMsg) {
-        this.errorStatus = status;
+    public ErrorResponseDto( HttpStatus errStatus, int errCode, String errMsg) {
+        this.errorStatus = errStatus;
         this.errorCode = errCode;
         this.errorMessage = errMsg;
     }

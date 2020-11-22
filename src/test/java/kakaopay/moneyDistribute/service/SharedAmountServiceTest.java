@@ -1,10 +1,13 @@
 package kakaopay.moneyDistribute.service;
 
+import kakaopay.moneyDistribute.api.response.SearchShareDto;
+import kakaopay.moneyDistribute.api.response.SearchSharedAmountDto;
 import kakaopay.moneyDistribute.domain.Room;
 import kakaopay.moneyDistribute.domain.Share;
 import kakaopay.moneyDistribute.domain.SharedAmount;
 import kakaopay.moneyDistribute.domain.User;
 import kakaopay.moneyDistribute.exception.*;
+import kakaopay.moneyDistribute.repository.ShareRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +28,9 @@ import static org.junit.Assert.fail;
 @RunWith(SpringRunner.class)
 @Transactional
 @Slf4j
+/**
+ *  initDB.java 활성화 필요
+ **/
 public class SharedAmountServiceTest {
     @Autowired
     UserService userService;
@@ -34,6 +40,8 @@ public class SharedAmountServiceTest {
     ShareService shareService;
     @Autowired
     SharedAmountService sharedAmountService;
+    @Autowired
+    ShareRepository shareRepository;
 
 
     static String newToken = "";
@@ -41,9 +49,10 @@ public class SharedAmountServiceTest {
     @Before
     public void testData() {
         // 뿌리기 생성
+        // initDB.java 활성화 필요
         User user = userService.findByUserName("A");
         Room room = roomService.findByName("roomA");
-        newToken = shareService.saveShare(user.getId(), room.getName(), 10000, 4);
+        newToken = shareService.saveShare(user.getId(), room.getName(), 10000, 3);
     }
 
     @Test(expected = NotExistTokenException.class)
@@ -62,7 +71,7 @@ public class SharedAmountServiceTest {
     }
 
     @Test(expected = NotInTheTokenRoomException.class)
-    @DisplayName("사용자가 토큰이 발행된 대화방에 있는지 확인")
+    @DisplayName("다른 대화방의 뿌리기 건을 받을 수 없습니다.")
     //@Rollback(false)
     public void isInTheTokenRoom() throws Exception {
         // given
@@ -113,7 +122,7 @@ public class SharedAmountServiceTest {
 
     @Test(expected = isOverSevenDaysException.class)
     @DisplayName("7일 이후에 조회 불가능 확인, Test시 createShare()의 setReqCreatedTime 수정 필요")
-    public void isImpossibleSearch() throws Exception{
+    public void isOverSevenDays() throws Exception{
         // given
         Share share = shareService.findByToken(newToken);
         // when
@@ -180,7 +189,8 @@ public class SharedAmountServiceTest {
         fail("위에서 예외가 발생해야 합니다.");
     }
 
-    @Test
+    @Test(expected = NotExistSharedAmountException.class)
+    @DisplayName("뿌리기건이 없으면 오류 발생")
     //@Rollback(false)
     public void findSharedAmountByShare() throws Exception {
         // given
@@ -197,21 +207,66 @@ public class SharedAmountServiceTest {
         leftSharedAmountC.get(0).receiveAmount(userC);
         List<SharedAmount> leftSharedAmountD = share.getLeftSharedAmount();
         leftSharedAmountD.get(0).receiveAmount(userD);
-        //SharedAmount leftSharedAmountE = share.getLeftSharedAmount();
-        //leftSharedAmountE.receiveAmount(userE);
 
         // when
-        int resultCnt = 0;
-        List<SharedAmount> sharedAmountList = sharedAmountService.findByToken(share);
-        for(SharedAmount sa : sharedAmountList){
-            if(sa.getRcvId() != null){
-                resultCnt ++;
-            }
+        List<SharedAmount> leftSharedAmountE = share.getLeftSharedAmount();
+        if(leftSharedAmountE.size() == 0){
+            throw new NotExistSharedAmountException();
+        }
+
+        // then
+        fail("위에서 예외가 발생해야 합니다.");
+    }
+
+    @Test
+    @DisplayName("뿌리기건이 잘 조회 되는지 확인")
+    //@Rollback(false)
+    public void findSharedAmountByUser() throws Exception {
+        // given
+        User userB = userService.findByUserName("B");
+        User userC = userService.findByUserName("C");
+        Share share = shareService.findByToken(newToken);
+
+        // when
+        List<SharedAmount> leftSharedAmountB = share.getLeftSharedAmount();
+        leftSharedAmountB.get(0).receiveAmount(userB);
+        List<SharedAmount> leftSharedAmountC = share.getLeftSharedAmount();
+        leftSharedAmountC.get(0).receiveAmount(userC);
+
+        SearchShareDto sharedAmountList = shareRepository.findSearchShareDto(share);
+
+        // then
+        assertEquals("뿌린 시각이 동일해야 한다.",share.getReqCreatedTime(),sharedAmountList.getReqCreatedTime());
+        assertEquals("뿌린 금액이 동일해야 한다.", share.getInitAmt(),sharedAmountList.getInitAmt());
+        assertEquals("받기 완료된 금액이 동일해야 한다.",share.getInitAmt()-share.getCurrAmt(),sharedAmountList.getTotalRcvAMt());
+
+
+        SearchSharedAmountDto s1 = sharedAmountList.getSearchSharedAmountDtos().get(0);
+        assertEquals("받은 금액이 동일해야 한다.",leftSharedAmountB.get(0).getRcvAmt(),s1.getRcvAmt());
+        assertEquals("받은 사용자 아이디가 동일해야 한다.",userB.getId(),s1.getRcvId());
+        SearchSharedAmountDto s2 = sharedAmountList.getSearchSharedAmountDtos().get(1);
+        assertEquals("받은 금액이 동일해야 한다.",leftSharedAmountC.get(0).getRcvAmt(),s2.getRcvAmt());
+        assertEquals("받은 사용자 아이디가 동일해야 한다.",userC.getId(),s2.getRcvId());
+
+
+
+    }
+
+    @Test(expected = NotTokenCreaterException.class)
+    @DisplayName("뿌린 사람만 조회가가능한지 확인")
+    //@Rollback(false)
+    public void findSharedAmountListBySameUser() throws Exception {
+        // given
+        User userB = userService.findByUserName("B");
+        Share share = shareService.findByToken(newToken);
+
+        // when
+        // 사용자가 해당 토큰의 발행자인지 여부
+        if (userB.getId() != share.getUser().getId()) {
+            throw new NotTokenCreaterException();
         }
         // then
-        assertEquals("크기가 3개나와야 한다.", 3, resultCnt);
-        for (SharedAmount sa : sharedAmountList) {
-            log.info(sa.getRcvId() + " " + sa.getRcvAmt());
-        }
+        fail("위에서 예외가 발생해야 합니다.");
+
     }
 }

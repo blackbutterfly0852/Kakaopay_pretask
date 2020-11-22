@@ -8,20 +8,15 @@ import java.util.List;
 
 @Data
 public class SearchShareDto {
-    private final String code;
-    private final String message;
     private final LocalDateTime reqCreatedTime; // 뿌린 시각
     private final long initAmt; // 뿌린 금액
     private final long totalRcvAMt; // 받기 완료된 금액
     private List<SearchSharedAmountDto> searchSharedAmountDtos; // 받기 완료된 정보
 
     public SearchShareDto(Share share) {
-        this.code = "200";
-        this.message = "정상 처리";
         this.reqCreatedTime = share.getReqCreatedTime();
         this.initAmt = share.getInitAmt();
         this.totalRcvAMt = share.getInitAmt() - share.getCurrAmt();
-
     }
 
 }

@@ -23,6 +23,9 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @Transactional
 @Slf4j
+/**
+ *  initDB.java 비활성화 필요
+ **/
 public class ShareServiceTest {
 
     @Autowired
