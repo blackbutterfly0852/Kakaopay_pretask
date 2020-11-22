@@ -5,29 +5,27 @@ import kakaopay.moneyDistribute.domain.User;
 import kakaopay.moneyDistribute.domain.UserRoom;
 import kakaopay.moneyDistribute.exception.NotInTheRoomException;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.fail;
-
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Transactional
 @Slf4j
-public class UserServiceTest {
+/**
+ *  initDB.java 비활성화 필요
+ **/
+class UserServiceTest {
 
     @Autowired
     UserService userService;
     @Autowired
     RoomService roomService;
 
-
-    @Test(expected = NotInTheRoomException.class)
+    @Test
     @DisplayName("사용자가 대화방에 있는지 확인")
     //@Rollback(false)
     public void isInTheRoom() throws Exception {
@@ -50,11 +48,13 @@ public class UserServiceTest {
 
         // when : userA는 roomB에 속하지 않는다.
         if (!userService.isInRoom(findUserA, roomB)) {
-            throw new NotInTheRoomException();
+            // then
+            Assertions.assertThrows(Exception.class, () -> {
+                throw new NotInTheRoomException();
+            });
+
         }
 
-        // then
-        fail("위에서 에러가 발생해야 합니다.");
     }
 
 }

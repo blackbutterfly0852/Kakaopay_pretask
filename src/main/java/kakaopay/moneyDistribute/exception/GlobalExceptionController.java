@@ -4,9 +4,12 @@ import kakaopay.moneyDistribute.api.response.ErrorResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import javax.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 @Slf4j
@@ -19,11 +22,24 @@ public class GlobalExceptionController {
     /**
      * 입력 값 오류
      **/
-    @ExceptionHandler(MissingRequestHeaderException.class)
-    protected ResponseEntity<ErrorResponseDto> ErrorHandler(MissingRequestHeaderException e) {
-        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "필수 HEADER 정보가 없습니다.");
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected ResponseEntity<ErrorResponseDto> ErrorHandler(ConstraintViolationException e) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "Header를 확인해주세요.");
         return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    protected ResponseEntity<ErrorResponseDto> ErrorHandler(MissingServletRequestParameterException e) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "파라미터 명을 확인해 주세요.");
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    protected ResponseEntity<ErrorResponseDto> ErrorHandler(MethodArgumentTypeMismatchException e) {
+        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "파라미터 값이 유효하지 않습니다.");
+        return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
+    }
+
 
     /**
      * 뿌리기 생성 API 시 오류

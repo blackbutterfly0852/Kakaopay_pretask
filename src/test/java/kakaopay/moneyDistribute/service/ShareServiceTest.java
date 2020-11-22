@@ -3,12 +3,10 @@ package kakaopay.moneyDistribute.service;
 import kakaopay.moneyDistribute.domain.*;
 import kakaopay.moneyDistribute.repository.ShareRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -17,16 +15,14 @@ import java.util.List;
 import static kakaopay.moneyDistribute.domain.SharedAmount.createSharedAmount;
 import static kakaopay.moneyDistribute.util.Utility.createToken;
 import static kakaopay.moneyDistribute.util.Utility.dividedAmount;
-import static org.junit.Assert.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
-@RunWith(SpringRunner.class)
 @Transactional
 @Slf4j
 /**
  *  initDB.java 비활성화 필요
  **/
-public class ShareServiceTest {
+class ShareServiceTest {
 
     @Autowired
     UserService userService;
@@ -39,9 +35,8 @@ public class ShareServiceTest {
     @Autowired
     SharedAmountService sharedAmountService;
 
-
     @Test
-    @DisplayName("토큰 존재확인")
+    @DisplayName("토큰 유효성 확인")
     //@Rollback(false)
     public void isExistToken() throws Exception {
         // given
@@ -66,7 +61,7 @@ public class ShareServiceTest {
     }
 
     @Test
-    @DisplayName("토큰 자동생성 확인")
+    @DisplayName("토큰 자동 생성 확인")
     //@Rollback(false)
     public void isGenerateToken() throws Exception {
         // given
@@ -134,10 +129,8 @@ public class ShareServiceTest {
 
     }
 
-
-
     @Test
-    @DisplayName("뿌리기 분배건 저장 확인")
+    @DisplayName("분배 건 저장")
     //@Rollback(false)
     public void isGoodSaveSharedAmount() throws Exception {
         // given
@@ -163,7 +156,7 @@ public class ShareServiceTest {
         }
 
         // when
-         for(SharedAmount sa : sharedAmountList){
+        for(SharedAmount sa : sharedAmountList){
             share.addSharedAmount(sa);
         }
         shareRepository.saveShare(share);
@@ -171,10 +164,9 @@ public class ShareServiceTest {
         List<SharedAmount> findSharedAmountList = findShare.getSharedAmountList();
 
         // then
-        assertEquals("분배되서 저장된 크기가 10이어야 합니다.", 10, findSharedAmountList.size());
+        assertEquals( 10, findSharedAmountList.size());
 
     }
-
 
 
 }

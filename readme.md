@@ -12,14 +12,21 @@
 ## 2. Problem Solving    
 ### 1) Development environment
 * Language : Java 11
-* FrameWork : Spring Boot 2.3.6.RELEASE, Spring JPA
-* Database : H2 1.4.199.RELEASE
-
+* FrameWork : Spring Boot 2.3.6.RELEASE + Spring JPA + Junit 5
+* Database : H2 1.4.199.RELEASE (application.yml 참고) 
+    ``` 
+    datasource:
+        * url: jdbc:h2:tcp://localhost/~/kakaopay
+        * username: sa
+        * password:
+        * driver-class-name: org.h2.Driver
+    ```
 ### 2) Database Modeling
 * 응집도를 높이기 위해 각 도메인 별로 __생성 메소드__ 및 __연관관계 메소드__ 활용.
-* __핵심 TABLE 및 DDL__
-   * Share : 뿌리기 테이블.
-   * SharedAmount : 받기 테이블.
+* **핵심 TABLE 및 DDL**
+   * **Share : 뿌리기 테이블.**
+        * *고유 토큰은 KEY값이 될 수 있으나 문자열이므로 Unique로 제약하고 별도의 PK을 사용한다.*
+   * **SharedAmount : 받기 테이블.**
 ``` H2 Database
 create table share (
     x_share_id bigint not null, -- 뿌리기 PK 
@@ -45,15 +52,16 @@ create table sharedamount (
     x_rcv_time timestamp, -- 분배 받은 시각
     primary key (x_shared_amt_id))
 ```          
-* 관리 TABLE 및 DDL
+* (추가적으로) 관리용 TABLE 생성
     * User : 사용자 관리 테이블.
     * UserRoom : 대화방에 소속된 사용자 관리 테이블.
     * Room : 대화방 관리 테이블.
     
 * ERD
+
 * Dummy Data
   * User, UserRoom, Room 테이블의 Dummy Data.  
-  * 실행 시 InitDB.java의 @PostConstruct로 인해 Dummy Data가 Insert.
+  * 실행 시 __InitDB.java__의 @PostConstruct로 인해 Dummy Data가 Insert.
   * Dummy Data의 구조 (UserRoom 테이블 참고)
   
     |   |roomA  |roomB  |roomC  |roomD  |roomE  |
@@ -245,4 +253,6 @@ create table sharedamount (
         * test_2 : `test...ShareService#isExistToken`
     * 뿌린 건에 대한 조회는 7일 동안 할 수 있습니다.
         * test_1 : `test...SharedAmountService#isOverSevenDays`
-         
+### 4) 전체 TEST 결과
+![캡처](C:\201118 KAKAOPAY\moneyDistribute\docs\testResult.png)
+
