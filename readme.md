@@ -25,8 +25,8 @@
 ### 2) Database Modeling
 * 응집도를 높이기 위해 각 도메인 별로 __생성 메소드__ 및 __연관관계 메소드__ 활용.
 * **핵심 TABLE 및 DDL**
-   * **Share : 뿌리기 테이블** ->
-        고유 토큰은 KEY값이 될 수 있으나 문자열이므로 Unique로 제약하고 별도의 PK을 사용한다.
+   * **Share : 뿌리기 테이블** `->
+        고유 토큰은 KEY값이 될 수 있으나 문자열이므로 Unique로 제약하고 별도의 PK을 사용한다.`
    * **SharedAmount : 받기 테이블**
 ``` H2 Database
 create table share (
@@ -66,7 +66,7 @@ create table sharedamount (
 * Dummy Data
   * User, UserRoom, Room 테이블의 Dummy Data
   * 실행 시 __InitDB.java__의 @PostConstruct로 인해 Dummy Data가 Insert
-  * **Dummy Data의 구조 (UserRoom 테이블 참고)**
+  * **Dummy Data의 구조 (UserRoom 테이블 참고)** `-> 대화방에 특정 사용자들이 존재함을 표현`
   
     |   |roomA  |roomB  |roomC  |roomD  |roomE  |
     |---|:-----:|:-----:|:-----:|:-----:|:-----:|
