@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/kakaopay
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create #none
+    properties:
+      hibernate:
+        show-sql: true
+        format-sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false # Could not initialize service에서 영속성컨테스트가 종료.
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
