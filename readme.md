@@ -76,6 +76,7 @@ create table sharedamount (
   * 다양한 오류 사항을 `kakaopay.moneyDistribute.exception.GlobalExceptionController.java`을 활용하여 일관성 있게 처리.
 
   ```json
+  // 예시
   {
     "errorStatus": "INTERNAL_SERVER_ERROR",
     "errorCode": 500,
