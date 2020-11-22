@@ -55,6 +55,7 @@ create table sharedamount (
 ```          
     
 * ERD
+
 ![testResult](./docs/ERD.png)
     
 
