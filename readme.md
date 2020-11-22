@@ -137,8 +137,8 @@ create table sharedamount (
     ```   
 * 오류시 예외 클래스 종류
   
-     contents| exception_class | response_code | message |
-    | --- | --- | --- | --- |
+     contents| exception_class | code | message |
+    | --- | --- | :---: | --- |
     | 공통 | ConstraintViolationException | 400 | Header를 확인해주세요. |
     | | MissingServletRequestParameterException | 400 | 파라미터 명을 확인해 주세요. |
     | | MethodArgumentTypeMismatchException | 400 | 파라미터 값이 유효하지 않습니다. |
