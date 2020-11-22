@@ -55,7 +55,7 @@ create table sharedamount (
 ```          
     
 * ERD
-
+![testResult](./docs/ERD.png)
     
 
 * (추가적으로) 관리용 TABLE 생성
