@@ -136,9 +136,9 @@ create table sharedamount (
   
      Contents| ExceptionClass | Code | Message |
     | --- | --- | :---: | --- |
-    | 공통 | `ConstraintViolationException` | 400 | Header를 확인해주세요. |
+    | 공통 | `ConstraintViolationException` | 400 | 필수 헤더값을 확인해주세요. |
     | | `MissingServletRequestParameterException` | 400 | 파라미터 명을 확인해 주세요. |
-    | | `MethodArgumentTypeMismatchException` | 400 | 파라미터 값이 유효하지 않습니다. |
+    | | `MethodArgumentTypeMismatchException` | 400 | 필수 헤더값 또는 파라미터값이 유효하지 않습니다. |
     | 뿌리기 | `OverRoomCountException` | 500 | 뿌릴 인원은 대화방 인원 보다 작거나 한 명 이상이어야 합니다. |
     | |`NotInTheRoomException` | 500 | 해당 대화방에 없는 사용자입니다. |
     | |`NotActivationStatusException` | 404 | 해당 사용자는 존재하지 않습니다. |

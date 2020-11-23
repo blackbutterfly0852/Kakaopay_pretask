@@ -69,8 +69,7 @@ public class Share {
         share.setInitCnt(initCnt);
         share.setCurrCnt(0);
         share.setReqCreatedTime(LocalDateTime.now());
-        //share.setReqCreatedTime(LocalDateTime.now().minusMinutes(11)); // 10분초과 TEST용
-        //share.setReqCreatedTime(LocalDateTime.now().minusDays(11)); // 7일초과 TEST용
+        //share.setReqCreatedTime(LocalDateTime.now().minusDays(11)); // 10분초과 7일초과 TEST용
         return share;
     }
 

@@ -24,7 +24,7 @@ public class GlobalExceptionController {
      **/
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(ConstraintViolationException e) {
-        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "Header를 확인해주세요.");
+        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "필수 헤더값을 확인해주세요.");
         return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 
@@ -36,7 +36,7 @@ public class GlobalExceptionController {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<ErrorResponseDto> ErrorHandler(MethodArgumentTypeMismatchException e) {
-        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "파라미터 값이 유효하지 않습니다.");
+        ErrorResponseDto errorResponse = new ErrorResponseDto(HttpStatus.BAD_REQUEST, HttpStatus.BAD_REQUEST.value(), "필수 헤더값 또는 파라미터값이 유효하지 않습니다.");
         return new ResponseEntity<>(errorResponse, errorResponse.getErrorStatus());
     }
 

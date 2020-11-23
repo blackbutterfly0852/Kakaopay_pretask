@@ -11,13 +11,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api")
-@Validated()
+@Validated
 public class ShareApiController {
 
     private final ShareService shareService;
@@ -25,10 +24,10 @@ public class ShareApiController {
 
     // 1. 뿌리기 생성 API
     @PostMapping
-    public ResponseDto createShare(@RequestHeader("X-USER-ID") @NotNull Long userId,
-                                   @RequestHeader("X-ROOM-ID") @NotBlank String roomName,
-                                   @RequestParam(value = "initAmt")  @NotNull long initAmt,
-                                   @RequestParam(value = "initCnt")  @NotNull  int initCnt
+    public ResponseDto createShare(@RequestHeader(value = "X-USER-ID") @NotNull Long userId,
+                                   @RequestHeader(value = "X-ROOM-ID") @NotBlank String roomName,
+                                   @RequestParam(value = "initAmt") @NotNull long initAmt,
+                                   @RequestParam(value = "initCnt") @NotNull int initCnt
     ) {
         String newToken = shareService.saveShare(userId, roomName, initAmt, initCnt);
         return new ResponseDto(new CreateShareDto(newToken));
@@ -38,7 +37,7 @@ public class ShareApiController {
     @PutMapping
     public ResponseDto receiveShare(@RequestHeader(value = "X-USER-ID") @NotNull Long userId,
                                     @RequestHeader(value = "X-ROOM-ID") @NotBlank String roomName,
-                                    @RequestParam(value = "token") @NotEmpty  String tokenName
+                                    @RequestParam(value = "token") @NotBlank String tokenName
 
     ) {
         long rcvAmt = sharedAmountService.saveSharedAmount(userId, roomName, tokenName);
