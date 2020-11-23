@@ -26,7 +26,7 @@
 * 응집도를 높이기 위해 각 도메인 별 __생성 메소드__ 및 __연관관계 메소드__ 활용.
 * **핵심 TABLE 및 DDL**
    * **Share : 뿌리기 테이블** `->
-        고유 토큰은 KEY값이 될 수 있으나 문자열이므로 Unique로 제약하고 별도의 PK을 사용한다.`
+        고유 토큰은 KEY값이 될 수 있으나 문자열이므로 Unique로 제약하고 별도의 PK을 사용.`
    * **SharedAmount : 받기 테이블**
 ``` H2 Database
 create table share (
@@ -73,7 +73,7 @@ create table sharedamount (
 
       
 * ErrorHandling
-  * 다양한 오류 사항을 `kakaopay.moneyDistribute.exception.GlobalExceptionController.java`을 활용하여 일관성 있게 처리.
+  * 다양한 오류를 `GlobalExceptionController.java`을 활용하여 일관성 있게 처리.
 
   ```json
   // 예시
